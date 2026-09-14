@@ -1,0 +1,20 @@
+# Stuff
+__pycache__
+.vscode/
+
+# The randomizer
+randomizer/
+randomizer.zip
+
+# Generated content (revist these once refactor is done)
+random_settings.json
+patches/
+data/
+failed_settings/
+
+
+
+blind_random_settings.json
+my_weights.json
+ERRORLOG.TXT
+weights_report.html
