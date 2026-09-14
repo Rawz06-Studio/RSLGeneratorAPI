@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -17,7 +20,10 @@ public class MainController {
     @GetMapping("/")
     public String index(Model model) {
         model.addAttribute("version", appVersion);
-        model.addAttribute("presets", PresetDto.values());
+        List<Map<String, String>> presets = Arrays.stream(PresetDto.values())
+                .map(preset -> Map.of("name", preset.name()))
+                .toList();
+        model.addAttribute("presets", presets);
         return "index";
     }
 }
