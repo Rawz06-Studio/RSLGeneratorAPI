@@ -66,7 +66,12 @@
         </div>
     </div>
 
-    <script>
+    <!-- Footer -->
+    <footer class="text-center text-gray-400 text-sm mt-12">
+        <p>RSL Generator <span th:text="${version}">v1.0.0</span></p>
+    </footer>
+
+    <script th:inline="javascript">
         const presetSelect = document.getElementById('preset');
         const generateBtn = document.getElementById('generate-btn');
         const loadingDiv = document.getElementById('loading');
@@ -77,40 +82,30 @@
         const presetsInfoDiv = document.getElementById('presets-info');
         let generatedData = null;
 
+        const presets = [[${presets}]];
+
         generateBtn.addEventListener('click', generateSettings);
         downloadBtn.addEventListener('click', downloadFile);
 
         // Load presets on page load
         document.addEventListener('DOMContentLoaded', loadPresets);
 
-        async function loadPresets() {
-            try {
-                const response = await fetch('/api/rsl/presets');
-                if (!response.ok) {
-                    throw new Error(`Error ${response.status}: ${response.statusText}`);
-                }
+        function loadPresets() {
+            // Populate select dropdown
+            presets.forEach(preset => {
+                const option = document.createElement('option');
+                option.value = preset.name;
+                option.textContent = preset.name;
+                presetSelect.appendChild(option);
+            });
 
-                const presets = await response.json();
-
-                // Populate select dropdown
-                presets.forEach(preset => {
-                    const option = document.createElement('option');
-                    option.value = preset;
-                    option.textContent = preset;
-                    presetSelect.appendChild(option);
-                });
-
-                // Display preset info
-                presetsInfoDiv.innerHTML = presets.map(preset => `
-                    <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
-                        <h3 class="text-white font-semibold mb-2">${preset}</h3>
-                        <p class="text-gray-400 text-sm">Preset: ${preset}</p>
-                    </div>
-                `).join('');
-            } catch (error) {
-                console.error('Error loading presets:', error);
-                showError('Unable to load presets');
-            }
+            // Display preset info
+            presetsInfoDiv.innerHTML = presets.map(preset => `
+                <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                    <h3 class="text-white font-semibold mb-2">${preset.name}</h3>
+                    <p class="text-gray-400 text-sm">Preset: ${preset.name}</p>
+                </div>
+            `).join('');
         }
 
         async function generateSettings() {

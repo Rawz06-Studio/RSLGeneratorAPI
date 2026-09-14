@@ -20,11 +20,6 @@ public class RSLSettingGeneratorController {
     private final PresetMapper presetMapper;
     private final SettingsMapper settingsMapper;
 
-    @GetMapping("/presets")
-    public PresetDto[] getPresets() {
-        return PresetDto.values();
-    }
-
     @GetMapping("/{preset}")
     public SettingsDto generateSettings(@PathVariable PresetDto preset) {
         return settingsMapper.toDto(generateRSLSettingsUseCase.generate(presetMapper.toEntity(preset)));
