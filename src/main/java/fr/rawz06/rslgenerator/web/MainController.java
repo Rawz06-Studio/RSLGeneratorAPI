@@ -1,16 +1,11 @@
 package fr.rawz06.rslgenerator.web;
 
-import fr.rawz06.rslgenerator.web.dto.PresetDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class MainController {
 
@@ -18,12 +13,7 @@ public class MainController {
     private String appVersion;
 
     @GetMapping("/")
-    public String index(Model model) {
-        model.addAttribute("version", appVersion);
-        List<Map<String, String>> presets = Arrays.stream(PresetDto.values())
-                .map(preset -> Map.of("name", preset.name()))
-                .toList();
-        model.addAttribute("presets", presets);
-        return "index";
+    public String index() {
+        return "Hello World from " + appVersion;
     }
 }
