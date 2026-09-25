@@ -1,5 +1,6 @@
 package fr.rawz06.rslgenerator.web;
 
+import fr.rawz06.rslgenerator.engine.usecases.GenerateRSLSettingsProxyUseCase;
 import fr.rawz06.rslgenerator.engine.usecases.GenerateRSLSettingsUseCase;
 import fr.rawz06.rslgenerator.web.dto.PresetDto;
 import fr.rawz06.rslgenerator.web.dto.SettingsDto;
@@ -16,12 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class RSLSettingGeneratorController {
 
-    private final GenerateRSLSettingsUseCase generateRSLSettingsUseCase;
+    private final GenerateRSLSettingsProxyUseCase generateRSLSettingsProxyUseCase;
     private final PresetMapper presetMapper;
     private final SettingsMapper settingsMapper;
 
     @GetMapping("/{preset}")
     public SettingsDto generateSettings(@PathVariable PresetDto preset) {
-        return settingsMapper.toDto(generateRSLSettingsUseCase.generate(presetMapper.toEntity(preset)));
+        return settingsMapper.toDto(generateRSLSettingsProxyUseCase.generate(presetMapper.toEntity(preset)));
     }
 }
