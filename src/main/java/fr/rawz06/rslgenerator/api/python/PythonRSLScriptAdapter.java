@@ -39,14 +39,8 @@ public class PythonRSLScriptAdapter implements RSLScriptRunner {
     @Value("${app.python.weights.rsl}")
     private String rslWeight;
 
-    @Value("${app.python.weights.pot}")
-    private String potWeight;
-
     @Value("${app.python.weights.rot}")
     private String rotWeight;
-
-    @Value("${app.python.weights.beginner}")
-    private String beginnerWeight;
 
     private final ObjectMapper objectMapper;
 
@@ -58,9 +52,7 @@ public class PythonRSLScriptAdapter implements RSLScriptRunner {
     public SettingsFile generateSettings(Preset preset) throws ScriptExecutionException {
         String weightFile = switch (preset) {
             case Preset.RSL -> rslWeight;
-            case Preset.POT -> potWeight;
             case Preset.ROT -> rotWeight;
-            case Preset.BEGINNER -> beginnerWeight;
         };
 
         logger.info("Generating {} settings with Python script...", preset.getName());
@@ -68,12 +60,22 @@ public class PythonRSLScriptAdapter implements RSLScriptRunner {
 
         try {
             // 1. Prepare command
-            ProcessBuilder pb = new ProcessBuilder(
-                    pythonCommand,
-                    scriptName,
-                    "--override", weightFile,
-                    "--no_seed"
-            );
+            ProcessBuilder pb;
+            if(Preset.RSL.equals(preset)) {
+                pb = new ProcessBuilder(
+                        pythonCommand,
+                        scriptName,
+                        "--no_seed"
+                );
+            } else {
+                pb = new ProcessBuilder(
+                        pythonCommand,
+                        scriptName,
+                        "--override", weightFile,
+                        "--no_seed"
+                );
+            }
+
 
             // Set working directory
             File workingDir = new File(scriptDir);

@@ -10,9 +10,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public enum Preset {
     RSL("rsl"),
-    POT("pot"),
-    ROT("rot"),
-    BEGINNER("beginner");
+    ROT("rot");
 
     private final String name;
 }
