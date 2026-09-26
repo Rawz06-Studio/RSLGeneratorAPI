@@ -19,9 +19,6 @@ public class GenerateRSLSettingsProxyUseCase {
 
     public SettingsFile generate(Preset preset) {
         SettingsFile settingsFile = cache.get(preset);
-        if(settingsFile != null) {
-            settingsFile = generateRSLSettingsUseCase.generate(preset);
-        }
         cache.put(preset, generateRSLSettingsUseCase.generate(preset));
         return settingsFile;
     }
