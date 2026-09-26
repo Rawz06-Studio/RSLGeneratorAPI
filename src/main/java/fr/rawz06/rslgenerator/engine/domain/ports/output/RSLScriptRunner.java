@@ -1,4 +1,4 @@
-package fr.rawz06.rslgenerator.engine.domain.ports;
+package fr.rawz06.rslgenerator.engine.domain.ports.output;
 
 import fr.rawz06.rslgenerator.engine.domain.entities.Preset;
 import fr.rawz06.rslgenerator.engine.domain.entities.SettingsFile;

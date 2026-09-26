@@ -1,9 +1,10 @@
 package fr.rawz06.rslgenerator.api.python;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.rawz06.rslgenerator.engine.domain.entities.Preset;
 import fr.rawz06.rslgenerator.engine.domain.entities.SettingsFile;
-import fr.rawz06.rslgenerator.engine.domain.ports.RSLScriptRunner;
+import fr.rawz06.rslgenerator.engine.domain.ports.output.RSLScriptRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -114,18 +116,26 @@ public class PythonRSLScriptAdapter implements RSLScriptRunner {
                 throw new ScriptExecutionException("Generated file not found: " + generatedFile.getAbsolutePath());
             }
 
-            @SuppressWarnings("unchecked")
-            Map<String, Object> settings = objectMapper.readValue(generatedFile, Map.class);
-            logger.info("Settings read successfully ({} keys)", settings.size());
+            Map<String, Object> raw = objectMapper.readValue(
+                    generatedFile, new TypeReference<>() {
+                    });
 
-            // 6. Delete temporary file
-            boolean deleted = generatedFile.delete();
-            if (!deleted) {
-                logger.warn("Unable to delete temporary file: {}", generatedFile.getAbsolutePath());
-            } else {
-                logger.debug("Temporary file deleted: {}", filename);
+            Object nested = raw.get("settings");
+            if (!(nested instanceof Map<?, ?> settingsMap)) {
+                throw new ScriptExecutionException(
+                        "Generated JSON file is invalid: 'settings' key is missing or not an object");
             }
 
+            Map<String, Object> settings = new HashMap<>();
+            for (Map.Entry<?, ?> entry : settingsMap.entrySet()) {
+                if (!(entry.getKey() instanceof String key)) {
+                    throw new ScriptExecutionException(
+                            "Generated JSON file is invalid: key '" + entry.getKey() + "' is not a String");
+                }
+                settings.put(key, entry.getValue());
+            }
+
+            logger.info("Settings read successfully ({} keys)", settings.size());
             return new SettingsFile(settings);
 
         } catch (InterruptedException e) {

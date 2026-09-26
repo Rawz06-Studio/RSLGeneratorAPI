@@ -13,6 +13,7 @@ public record SettingsFile(
         if (settings == null) {
             throw new IllegalArgumentException("Settings cannot be null");
         }
+        settings = Map.copyOf(settings); // Make the map unmodifiable
     }
 }
 
