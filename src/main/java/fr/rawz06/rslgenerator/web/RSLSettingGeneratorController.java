@@ -1,5 +1,6 @@
 package fr.rawz06.rslgenerator.web;
 
+import fr.rawz06.audit.annotations.Audited;
 import fr.rawz06.rslgenerator.engine.domain.ports.input.GenerateRSLSettings;
 import fr.rawz06.rslgenerator.web.dto.PresetDto;
 import fr.rawz06.rslgenerator.web.dto.SettingsDto;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/rsl")
 @RequiredArgsConstructor
+@Audited
 public class RSLSettingGeneratorController {
 
     private final GenerateRSLSettings generateRSLSettings;

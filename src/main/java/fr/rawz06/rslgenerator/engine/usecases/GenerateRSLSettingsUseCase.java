@@ -1,5 +1,6 @@
 package fr.rawz06.rslgenerator.engine.usecases;
 
+import fr.rawz06.audit.annotations.Audited;
 import fr.rawz06.rslgenerator.engine.domain.entities.Preset;
 import fr.rawz06.rslgenerator.engine.domain.entities.SettingsFile;
 import fr.rawz06.rslgenerator.engine.domain.ports.input.ApplySettingsOverrides;
@@ -7,9 +8,7 @@ import fr.rawz06.rslgenerator.engine.domain.ports.input.GenerateRSLSettings;
 import fr.rawz06.rslgenerator.engine.domain.ports.output.RSLScriptRunner;
 import fr.rawz06.rslgenerator.engine.exceptions.ScriptErrorException;
 
-import java.util.HashMap;
-import java.util.Map;
-
+@Audited
 public class GenerateRSLSettingsUseCase implements GenerateRSLSettings {
 
     private final RSLScriptRunner rslScriptRunner;

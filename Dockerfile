@@ -4,13 +4,21 @@ FROM maven:3.9-eclipse-temurin-25-alpine AS builder
 
 WORKDIR /app
 
-# Copy pom.xml and download dependencies (cached layer)
-COPY pom.xml .
-RUN mvn dependency:go-offline -B
+ENV GITHUB_ACTOR=rawz06
 
-# Copy source code and build
+# Dependencies (cached layer as long as pom.xml / settings.xml do not change)
+COPY settings.xml pom.xml ./
+RUN --mount=type=secret,id=github_token \
+    --mount=type=cache,target=/root/.m2/repository \
+    GITHUB_TOKEN="$(cat /run/secrets/github_token)" \
+    mvn -s settings.xml -B dependency:go-offline
+
+# Build
 COPY src ./src
-RUN mvn clean package -DskipTests
+RUN --mount=type=secret,id=github_token \
+    --mount=type=cache,target=/root/.m2/repository \
+    GITHUB_TOKEN="$(cat /run/secrets/github_token)" \
+    mvn -s settings.xml -B clean package -DskipTests
 
 # Stage 2: Runtime image with Java + Python
 FROM eclipse-temurin:25-jre

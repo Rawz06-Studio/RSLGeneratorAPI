@@ -2,6 +2,7 @@ package fr.rawz06.rslgenerator.api.python;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.rawz06.audit.annotations.Audited;
 import fr.rawz06.rslgenerator.engine.domain.entities.Preset;
 import fr.rawz06.rslgenerator.engine.domain.entities.SettingsFile;
 import fr.rawz06.rslgenerator.engine.domain.ports.output.RSLScriptRunner;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
  * Executes RandomSettingsGenerator.py script to generate random settings.
  */
 @Component
+@Audited
 public class PythonRSLScriptAdapter implements RSLScriptRunner {
 
     private static final Logger logger = LoggerFactory.getLogger(PythonRSLScriptAdapter.class);

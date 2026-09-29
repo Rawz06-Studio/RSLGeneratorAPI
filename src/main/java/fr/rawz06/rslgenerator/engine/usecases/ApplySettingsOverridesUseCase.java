@@ -1,5 +1,6 @@
 package fr.rawz06.rslgenerator.engine.usecases;
 
+import fr.rawz06.audit.annotations.Audited;
 import fr.rawz06.rslgenerator.engine.domain.entities.Preset;
 import fr.rawz06.rslgenerator.engine.domain.entities.SettingsFile;
 import fr.rawz06.rslgenerator.engine.domain.ports.input.ApplySettingsOverrides;
@@ -7,6 +8,7 @@ import fr.rawz06.rslgenerator.engine.domain.ports.input.ApplySettingsOverrides;
 import java.util.HashMap;
 import java.util.Map;
 
+@Audited
 public class ApplySettingsOverridesUseCase implements ApplySettingsOverrides {
 
     private static final String[] ADULT_TRADE_START = {
